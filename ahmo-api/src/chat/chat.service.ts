@@ -27,7 +27,12 @@ export class ChatService {
     chat.name = createChatDto.name;
     chat.type = createChatDto.type;
     chat.admin = user;
-    const group = createChatDto.members.split(',').map(memberId => +memberId)
+    const group = createChatDto.members.split(',').map(memberId => +memberId);
+
+       // Check if the user is the creator of the group
+      if (!group.includes(user.id)) {
+        throw new Error('Only the creator of the group can create the chat.');
+      }
 
     const memberPromises = group.map(async memberId => {
       const member = new MemberEntity();
